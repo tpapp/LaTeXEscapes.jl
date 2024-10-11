@@ -1,7 +1,7 @@
 # LaTeXEscapes.jl
 
 ![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
-[![CI](https://github.com/tpapp/LaTeXStrings.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/tpapp/LaTeXStrings.jl/actions/workflows/CI.yml)
+[![CI](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml)
 [![codecov.io](http://codecov.io/github/tpapp/LaTeXEscapes.jl/coverage.svg?branch=master)](http://codecov.io/github/tpapp/LaTeXEscapes.jl?branch=master)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
