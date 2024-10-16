@@ -7,7 +7,7 @@ $(DocStringExtensions.EXPORTS)
 """
 module LaTeXEscapes
 
-export LaTeX, @lx_str, wrap_math, print_escaped
+export LaTeX, @lx_str, wrap_math, print_escaped, LaTeXError
 
 using Automa: make_tokenizer, tokenize, @re_str
 using DocStringExtensions: DocStringExtensions, SIGNATURES
@@ -30,6 +30,19 @@ LaTeX_tokens = [
 make_tokenizer((error, LaTeX_tokens)) |> eval
 
 """
+Error if some basic LaTeX validation checks fail.
+"""
+struct LaTeXError <: Exception
+    msg::String
+    raw_latex::String
+end
+
+function Base.showerror(io::IO, e::LaTeXError)
+    (; msg, raw_latex) = e
+    print(io, "LaTeXError: ", msg, " in\n  ", raw_latex)
+end
+
+"""
 $(SIGNATURES)
 
 Internal function that performs some basic checks on its argument interpreted as a piece
@@ -37,12 +50,12 @@ of LaTeX code. The purpose of this function is to catch some simple mistakes (un
 parentheses or dollar signs) that would lead to an error message that is hard to
 intepret, possibly at a location very far from the actual error.
 
-If there is an error message, it returns a string which can be used as an error message.
+If there is an error, it returns a `LaTeXError`.
 
-If all checks pass, return `nothing`. Note that this does not mean that `latex_str` is
-correct LaTeX code, just that it passed some basic checks.
+If all checks pass, return `nothing`. Note that this does not mean the input is correct
+LaTeX code, just that it passed some basic checks.
 """
-function check_latex_msg(raw_latex)
+function maybe_latex_error(raw_latex)
     flag_mathmode::Bool = false
     count_curly::Int = 0
     for (_, _, token) in tokenize(LaTeXToken, raw_latex)
@@ -54,12 +67,13 @@ function check_latex_msg(raw_latex)
             count_curly -= 1
         end
     end
+    _err(msg) = LaTeXError(msg, raw_latex)
     if flag_mathmode
-        "Math mode not closed (missing '\$')."
+        _err("Math mode not closed (missing '\$').")
     elseif count_curly > 0
-        "$(count_curly) too many opening curly braces ('{')"
+        _err("$(count_curly) too many opening curly braces ('{')")
     elseif count_curly < 0
-        "$(-count_curly) too many closing curly braces ('}')"
+        _err("$(-count_curly) too many closing curly braces ('}')")
     else
         nothing
     end
@@ -108,7 +122,7 @@ end
 function Base.show(io::IO, str::LaTeX)
     (; raw_latex) = str
     print(io, "lx\"")
-    if check_latex_msg(raw_latex) ≡ nothing
+    if maybe_latex_error(raw_latex) ≡ nothing
         print(io, raw_latex)
     else
         printstyled(io, raw_latex; color = :red)
@@ -153,8 +167,8 @@ end
 function print_escaped(io::IO, str::LaTeX; check::Bool = true)
     (; raw_latex) = str
     if check
-        msg = check_latex_msg(raw_latex)
-        msg ≡ nothing || throw(ArgumentError(msg))
+        e = maybe_latex_error(raw_latex)
+        e ≡ nothing || throw(e)
     end
     print(io, raw_latex)
 end
@@ -202,8 +216,8 @@ end
 
 function print_escaped(io::IO, x::LaTeXString; check::Bool = true)
     if check
-        msg = check_latex_msg(x)
-        msg ≡ nothing || throw(ArgumentError(msg))
+        e = maybe_latex_error(x)
+        e ≡ nothing || throw(e)
     end
     write(io, x)
 end
