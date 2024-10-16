@@ -11,7 +11,7 @@ using Test
 end
 
 "check whether our tests flag LaTeX code with errors"
-is_ok(l::LaTeX) = LaTeXEscapes.check_latex_msg(parent(l)) ≡ nothing
+is_ok(l::LaTeX) = LaTeXEscapes.maybe_latex_error(parent(l)) ≡ nothing
 
 @testset "LaTeX validation" begin
     @test is_ok(lx"\cos(\varphi)")
@@ -29,9 +29,9 @@ end
         @test String(take!(io)) == "foo\$\\sin^2(x) + \\cos^2(x) = 1\$\$\\exp(0)\$"
     end
     @test print_escaped(String, lx"\hbox{x}") == "\\hbox{x}" # String fallback
-    @test_throws ArgumentError print_escaped(stdout, lx"\foo{")
+    @test_throws LaTeXError print_escaped(stdout, lx"\foo{")
     @test print_escaped(String, lx"\foo{"; check = false) == "\\foo{"
-    @test_throws ArgumentError print_escaped(stdout, L"\foo{")
+    @test_throws LaTeXError print_escaped(stdout, L"\foo{")
     @test print_escaped(String, L"\foo{"; check = false) == "\$\\foo{\$"
 end
 
