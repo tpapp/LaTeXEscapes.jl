@@ -26,7 +26,7 @@ end
         print_escaped(io, "foo")
         print_escaped(io, lx"\sin^2(x) + \cos^2(x) = 1"m)
         print_escaped(io, L"\exp(0)")
-        @test String(take!(io) == "foo\$\\sin^2(x) + \\cos^2(x) = 1\$\$\\exp(0)\$")
+        @test String(take!(io)) == "foo\$\\sin^2(x) + \\cos^2(x) = 1\$\$\\exp(0)\$"
     end
     @test print_escaped(String, lx"\hbox{x}") == "\\hbox{x}" # String fallback
     @test_throws ArgumentError print_escaped(stdout, lx"\foo{")
