@@ -1,7 +1,7 @@
 name = "LaTeXEscapes"
 uuid = "cf6549fa-34fa-4b85-907d-0f184605242c"
 authors = ["Tamás K. Papp <tkpapp@gmail.com>"]
-version = "0.1.0"
+version = "0.2.0"
 
 [deps]
 Automa = "67c07d97-cdcb-5c2c-af73-a7f9c32a568b"

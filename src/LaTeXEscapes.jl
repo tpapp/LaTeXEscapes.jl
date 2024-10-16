@@ -121,9 +121,17 @@ Base.parent(latex::LaTeX) = latex.raw_latex
 """
 $(SIGNATURES)
 
-Put \$'s around the string wrapped in [`LaTeX`](@ref).
+Put \$'s around a string, or a string wrapped in [`LaTeX`](@ref).
 """
 wrap_math(str::LaTeX) = LaTeX("\$" * str.raw_latex * "\$")
+
+function wrap_math(str::AbstractString)
+    io = IOBuffer()
+    print(io, '$')
+    print_escaped(io, str)
+    print(io, '$')
+    LaTeX(String(take!(io)))
+end
 
 """
 $(SIGNATURES)
@@ -151,11 +159,16 @@ function print_escaped(io::IO, str::LaTeX; check::Bool = true)
     print(io, raw_latex)
 end
 
+function print_escaped(::Type{String}, str; check::Bool = true)
+    sprint(io -> print_escaped(io, str; check))
+end
+
 """
 $(SIGNATURES)
 
 Outputs a version of `str` to `io` so that special characters (in LaTeX) are escaped to
-produce the expected output.
+produce the expected output. When the first argument is `String`, a string is returned
+instead.
 
 When `check` (default: `true`), some basic checks are performed on strings already in
 LaTex format. These do not guarantee valid LaTeX code, just catch some common mistakes
@@ -188,6 +201,10 @@ function print_escaped(io::IO, x; check::Bool = true)
 end
 
 function print_escaped(io::IO, x::LaTeXString; check::Bool = true)
+    if check
+        msg = check_latex_msg(x)
+        msg ≡ nothing || throw(ArgumentError(msg))
+    end
     write(io, x)
 end
 

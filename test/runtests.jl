@@ -21,6 +21,24 @@ is_ok(l::LaTeX) = LaTeXEscapes.check_latex_msg(parent(l)) ≡ nothing
     @test !is_ok(lx"$\cos")
 end
 
+@testset "print_escaped" begin
+    let io = IOBuffer()
+        print_escaped(io, "foo")
+        print_escaped(io, lx"\sin^2(x) + \cos^2(x) = 1"m)
+        print_escaped(io, L"\exp(0)")
+        @test String(take!(io) == "foo\$\\sin^2(x) + \\cos^2(x) = 1\$\$\\exp(0)\$")
+    end
+    @test print_escaped(String, lx"\hbox{x}") == "\\hbox{x}" # String fallback
+    @test_throws ArgumentError print_escaped(stdout, lx"\foo{")
+    @test print_escaped(String, lx"\foo{"; check = false) == "\\foo{"
+    @test_throws ArgumentError print_escaped(stdout, L"\foo{")
+    @test print_escaped(String, L"\foo{"; check = false) == "\$\\foo{\$"
+end
+
+@testset "wrap_math" begin
+    @test wrap_math(lx"\$100") == wrap_math(raw"$100") == LaTeX(raw"$\$100$")
+end
+
 using JET
 @testset "static analysis with JET.jl" begin
     @test isempty(JET.get_reports(report_package(LaTeXEscapes, target_modules=(LaTeXEscapes,))))
