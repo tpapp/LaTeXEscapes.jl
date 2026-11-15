@@ -155,12 +155,10 @@ Indicate the argument is to be treated as (valid, self-contained) LaTeX code.
 macro lx_str(str, flag = nothing)
     if flag ≡ nothing
         LaTeX(str)
+    elseif flag == "m"
+        wrap_math(LaTeX(str))
     else
-        if flag == "m"
-            wrap_math(LaTeX(str))
-        else
-            error("The only accepted flag is `m`.")
-        end
+        throw(ArgumentError("The only accepted flag is `m`."))
     end
 end
 

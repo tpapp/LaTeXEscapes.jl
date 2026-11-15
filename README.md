@@ -19,7 +19,7 @@ julia> using LaTeXEscapes
 julia> l1 = lx"\copyright"             # LaTeX
 LaTeX(\copyright)
 
-julia> l2 = lx"\cos(\phi)"             # LaTeX wrapped in math
+julia> l2 = lx"\cos(\phi)"m            # LaTeX wrapped in math
 LaTeX(\cos(\phi))
 
 julia> s3 = "1 < 3"                    # String

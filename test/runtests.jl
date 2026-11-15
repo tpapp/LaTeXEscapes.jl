@@ -2,6 +2,11 @@ using LaTeXEscapes
 using LaTeXStrings
 using Test
 
+using JET
+@testset "static analysis with JET.jl" begin
+    @test isempty(JET.get_reports(report_package(LaTeXEscapes, target_modules=(LaTeXEscapes,))))
+end
+
 @testset "macros, escaping and concatenation" begin
     s = lx"\textbf{A}" * lx"\cos(\varphi)"m * L"1+\sin(\alpha)" * raw"#$%&~_^{}<>|"
     @test parent(s) == (raw"\textbf{A}$\cos(\varphi)$$1+\sin(\alpha)$\#\$\%\&" *
@@ -37,11 +42,6 @@ end
 
 @testset "wrap_math" begin
     @test wrap_math(lx"\$100") == wrap_math(raw"$100") == LaTeX(raw"$\$100$")
-end
-
-using JET
-@testset "static analysis with JET.jl" begin
-    @test isempty(JET.get_reports(report_package(LaTeXEscapes, target_modules=(LaTeXEscapes,))))
 end
 
 @testset "QA with Aqua" begin
