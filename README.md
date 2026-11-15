@@ -2,7 +2,7 @@
 
 ![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
 [![CI](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml)
-[![codecov](https://codecov.io/github/tpapp/LaTeXEscapes.jl/graph/badge.svg?token=K7QwTVNxpE)](https://codecov.io/github/tpapp/LaTeXEscapes.jl)
+[![codecov](https://codecov.io/github/tpapp/LaTeXEscapes.jl/branch/master/graph/badge.svg?token=K7QwTVNxpE)](https://codecov.io/github/tpapp/LaTeXEscapes.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
 Julia package for escaping strings for LaTeX and wrapping LaTeX code.
