@@ -2,7 +2,7 @@
 
 ![lifecycle](https://img.shields.io/badge/lifecycle-experimental-orange.svg)
 [![CI](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/tpapp/LaTeXEscapes.jl/actions/workflows/CI.yml)
-[![codecov.io](http://codecov.io/github/tpapp/LaTeXEscapes.jl/coverage.svg?branch=master)](http://codecov.io/github/tpapp/LaTeXEscapes.jl?branch=master)
+[![codecov](https://codecov.io/github/tpapp/LaTeXEscapes.jl/graph/badge.svg?token=K7QwTVNxpE)](https://codecov.io/github/tpapp/LaTeXEscapes.jl)
 [![Aqua QA](https://raw.githubusercontent.com/JuliaTesting/Aqua.jl/master/badge.svg)](https://github.com/JuliaTesting/Aqua.jl)
 
 Julia package for escaping strings for LaTeX and wrapping LaTeX code.
@@ -37,8 +37,8 @@ Some rudimentary checks are performed with `print_escaped`, these can be skipped
 ```julia
 julia> print_escaped(stdout, lx"{unbalanced")
 ERROR: ArgumentError: 1 too many opening curly braces ('{')
-   
-julia> print_escaped(stdout, lx"{unbalanced"; check = false)  
+
+julia> print_escaped(stdout, lx"{unbalanced"; check = false)
 {unbalanced
 ```
 
